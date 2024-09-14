@@ -8,7 +8,8 @@ import { pieceMetadataService } from '../../pieces/piece-metadata-service'
 import { platformService } from '../../platform/platform.service'
 import { userService } from '../../user/user-service'
 
-const secretManagerLicenseKeysRoute = 'https://secrets.activepieces.com/license-keys'
+// const secretManagerLicenseKeysRoute = 'https://secrets.activepieces.com/license-keys'
+const secretManagerLicenseKeysRoute = 'http://activepieces-license-server/license-keys'
 
 const handleUnexpectedSecretsManagerError = (message: string) => {
     logger.error(`[ERROR]: Unexpected error from secret manager: ${message}`)
