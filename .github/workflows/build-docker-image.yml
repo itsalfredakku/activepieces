@@ -1,0 +1,35 @@
+name: Build Docker Image
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Set RELEASE env var from package.json
+        run: echo RELEASE=$(node --print "require('./package.json').version") >> $GITHUB_ENV
+
+      - name: Fail if tag already exists
+        run: '! docker manifest inspect activepieces/activepieces:${{ env.RELEASE }}'
+
+      - name: Set up Depot CLI
+        uses: depot/setup-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Build and tag Docker image
+        run: docker build -t ${{ secrets.DOCKERHUB_REF }} .
+
+      - name: Push Docker image to Docker Hub
+        run: docker push ${{ secrets.DOCKERHUB_REF }}
