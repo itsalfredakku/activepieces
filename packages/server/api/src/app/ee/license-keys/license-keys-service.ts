@@ -9,7 +9,7 @@ import { platformService } from '../../platform/platform.service'
 import { userService } from '../../user/user-service'
 
 // const secretManagerLicenseKeysRoute = 'https://secrets.activepieces.com/license-keys'
-const secretManagerLicenseKeysRoute = 'http://activepieces-license-server/license-keys'
+const secretManagerLicenseKeysRoute = process.env.AP_LICENSE_SERVER || 'https://secrets.activepieces.com/license-keys'
 
 const handleUnexpectedSecretsManagerError = (message: string) => {
     logger.error(`[ERROR]: Unexpected error from secret manager: ${message}`)
